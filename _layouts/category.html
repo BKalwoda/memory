@@ -1,0 +1,44 @@
+---
+layout: default
+---
+{% assign slug = page.category %}
+{% assign cat_label = page.title %}
+{% assign cat_desc = page.description %}
+{% assign cat_icon = page.icon %}
+
+{% comment %} If page didn't override, look up from data {% endcomment %}
+{% for top in site.data.categories %}
+  {% if top.slug == slug %}
+    {% if page.title == nil or page.title == "" %}{% assign cat_label = top.label %}{% endif %}
+    {% if cat_desc == nil %}{% assign cat_desc = top.description %}{% endif %}
+    {% if cat_icon == nil %}{% assign cat_icon = top.icon %}{% endif %}
+  {% endif %}
+  {% if top.children %}
+    {% for child in top.children %}
+      {% if child.slug == slug %}
+        {% if page.title == nil or page.title == "" %}{% assign cat_label = child.label %}{% endif %}
+        {% if cat_desc == nil %}{% assign cat_desc = child.description %}{% endif %}
+        {% if cat_icon == nil %}{% assign cat_icon = child.icon %}{% endif %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+
+{% assign entries = site.knowledge | where_exp: "d", "d.category contains slug" | sort: "updated" | reverse %}
+
+<header class="page-header">
+  <p class="eyebrow">{% if cat_icon %}<span aria-hidden="true">{{ cat_icon }}</span> {% endif %}Category</p>
+  <h1>{{ cat_label }}</h1>
+  {% if cat_desc %}<p class="page-subtitle">{{ cat_desc }}</p>{% endif %}
+  <p class="page-meta">{{ entries.size }} {% if entries.size == 1 %}entry{% else %}entries{% endif %}</p>
+</header>
+
+{% if entries.size > 0 %}
+<div class="card-grid">
+  {% for entry in entries %}
+    {% include entry-card.html entry=entry %}
+  {% endfor %}
+</div>
+{% else %}
+<p class="empty">No entries here yet.</p>
+{% endif %}

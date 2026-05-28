@@ -1,0 +1,53 @@
+# Category tree — single source of truth for the site's category structure.
+# Each leaf node has:
+#   slug:        url-safe identifier, must match the `category` field in
+#                entry frontmatter (e.g. "technology/programming")
+#   label:       human-readable label shown in nav and cards
+#   description: short description shown on the category page
+#   icon:        single emoji or unicode glyph used on tiles
+#
+# Adding a new category: add it here AND create the matching folder under
+# /_knowledge. That's it — listings update automatically.
+
+- slug: technology
+  label: Technology
+  description: How things work, how to build them.
+  icon: "⚙"
+  children:
+    - slug: technology/programming
+      label: Programming
+      description: Languages, paradigms, debugging notes.
+      icon: "❯_"
+    - slug: technology/ai
+      label: AI
+      description: Models, prompts, agents, evaluations.
+      icon: "✦"
+
+- slug: personal
+  label: Personal
+  description: Your own research, projects, and threads.
+  icon: "◐"
+  children:
+    - slug: personal/research
+      label: Research
+      description: Topics you're studying.
+      icon: "?"
+    - slug: personal/projects
+      label: Projects
+      description: Things you're building or shipping.
+      icon: "▲"
+
+- slug: ideas
+  label: Ideas
+  description: Sparks worth keeping but not yet developed.
+  icon: "✶"
+
+- slug: workflows
+  label: Workflows
+  description: Reproducible processes and playbooks.
+  icon: "↻"
+
+- slug: philosophy
+  label: Philosophy
+  description: Principles, mental models, things you believe.
+  icon: "∞"

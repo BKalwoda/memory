@@ -1,0 +1,28 @@
+/* Rouge syntax highlighting -- paper-warm light, soft contrast dark.
+   Class names follow Rouge's default scheme. */
+
+[data-theme="light"] {
+  .highlight pre { background: var(--code-bg); }
+  .highlight .c, .highlight .cm, .highlight .c1, .highlight .cs { color: #8a8478; font-style: italic; }
+  .highlight .k, .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kt { color: #b8400b; }
+  .highlight .s, .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .ss { color: #4f7a28; }
+  .highlight .n, .highlight .na, .highlight .nb, .highlight .nc, .highlight .nd, .highlight .ne, .highlight .nf, .highlight .nl, .highlight .nn, .highlight .nt, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi { color: #1f1d1b; }
+  .highlight .mi, .highlight .mf, .highlight .mh, .highlight .mo { color: #8a5a00; }
+  .highlight .o, .highlight .ow, .highlight .p { color: #67645d; }
+  .highlight .gi { color: #166534; }
+  .highlight .gd { color: #991b1b; }
+  .highlight .gh, .highlight .gu { color: #2563eb; font-weight: 600; }
+}
+
+[data-theme="dark"] {
+  .highlight pre { background: var(--code-bg); }
+  .highlight .c, .highlight .cm, .highlight .c1, .highlight .cs { color: #6e6a60; font-style: italic; }
+  .highlight .k, .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kt { color: #f59867; }
+  .highlight .s, .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc, .highlight .sd, .highlight .se, .highlight .sh, .highlight .si, .highlight .sx, .highlight .sr, .highlight .ss { color: #a3e635; }
+  .highlight .n, .highlight .na, .highlight .nb, .highlight .nc, .highlight .nd, .highlight .ne, .highlight .nf, .highlight .nl, .highlight .nn, .highlight .nt, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi { color: #ece9e0; }
+  .highlight .mi, .highlight .mf, .highlight .mh, .highlight .mo { color: #fbbf24; }
+  .highlight .o, .highlight .ow, .highlight .p { color: #a7a297; }
+  .highlight .gi { color: #86efac; }
+  .highlight .gd { color: #fca5a5; }
+  .highlight .gh, .highlight .gu { color: #93c5fd; font-weight: 600; }
+}

@@ -1,0 +1,87 @@
+title: Memory
+tagline: A personal knowledge vault — distilled from conversations, kept for later.
+description: >-
+  A long-term memory and archive system for important conversations and
+  extracted knowledge. Built with Jekyll, hosted on GitHub Pages.
+author: bkalwoda
+url: ""
+baseurl: ""
+lang: en
+
+# Build settings
+theme: null
+markdown: kramdown
+highlighter: rouge
+permalink: /:path/
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  hard_wrap: false
+  toc_levels: 2..3
+
+sass:
+  style: compressed
+  sass_dir: _sass
+
+# Plugins — only those whitelisted by GitHub Pages
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-redirect-from
+
+# Collections — single content collection so all listings, search, and related
+# logic share one source of truth.
+collections:
+  knowledge:
+    output: true
+    permalink: /knowledge/:path/
+
+# Files to include / exclude from the build
+include:
+  - pages
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - node_modules
+  - README.md
+  - ARCHITECTURE.md
+  - CONTRIBUTING.md
+  - scripts
+  - _templates
+  - .github
+
+# Default frontmatter so entries stay terse
+defaults:
+  - scope:
+      path: ""
+      type: knowledge
+    values:
+      layout: entry
+      status: evergreen
+      type: knowledge
+  - scope:
+      path: "pages"
+      type: pages
+    values:
+      layout: page
+
+# Site-wide menu (used by _includes/nav.html when _data/navigation.yml is missing)
+nav:
+  - title: Dashboard
+    url: /
+  - title: Search
+    url: /search/
+  - title: Categories
+    url: /categories/
+  - title: Tags
+    url: /tags/
+  - title: Archive
+    url: /archive/
+  - title: About
+    url: /about/
+
+# How many "recent" cards to show on the homepage
+recent_count: 6

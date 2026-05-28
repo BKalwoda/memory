@@ -1,0 +1,21 @@
+---
+layout: default
+---
+{% assign t = page.tag %}
+{% assign entries = site.knowledge | where_exp: "d", "d.tags contains t" | sort: "updated" | reverse %}
+
+<header class="page-header">
+  <p class="eyebrow">Tag</p>
+  <h1>#{{ t }}</h1>
+  <p class="page-meta">{{ entries.size }} {% if entries.size == 1 %}entry{% else %}entries{% endif %}</p>
+</header>
+
+{% if entries.size > 0 %}
+<div class="card-grid">
+  {% for entry in entries %}
+    {% include entry-card.html entry=entry %}
+  {% endfor %}
+</div>
+{% else %}
+<p class="empty">No entries tagged with #{{ t }} yet.</p>
+{% endif %}

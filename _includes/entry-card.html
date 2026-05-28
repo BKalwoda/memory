@@ -1,0 +1,31 @@
+{%- comment -%}
+  Renders a single entry card. Expects:
+    include.entry — a knowledge document
+{%- endcomment -%}
+{% assign e = include.entry %}
+{% assign cat_slug = e.category %}
+{% assign cat_label = cat_slug %}
+{% for top in site.data.categories %}
+  {% if top.slug == cat_slug %}{% assign cat_label = top.label %}{% endif %}
+  {% if top.children %}
+    {% for child in top.children %}
+      {% if child.slug == cat_slug %}{% assign cat_label = child.label %}{% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+
+<article class="entry-card" data-category="{{ e.category }}" data-tags="{{ e.tags | join: ',' }}">
+  <header class="card-head">
+    <a class="card-category" href="{{ '/categories/' | append: e.category | append: '/' | relative_url }}">{{ cat_label }}</a>
+    <time class="card-date" datetime="{{ e.updated | default: e.created | date: '%Y-%m-%d' }}">{{ e.updated | default: e.created | date: "%b %-d, %Y" }}</time>
+  </header>
+  <h3 class="card-title"><a href="{{ e.url | relative_url }}">{{ e.title | escape }}</a></h3>
+  {% if e.summary %}<p class="card-summary">{{ e.summary | escape }}</p>{% endif %}
+  {% if e.tags and e.tags.size > 0 %}
+  <ul class="card-tags" aria-label="Tags">
+    {% for tag in e.tags limit: 5 %}
+      <li><a href="{{ '/tags/' | append: tag | append: '/' | relative_url }}">#{{ tag }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</article>

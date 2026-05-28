@@ -1,0 +1,58 @@
+{%- comment -%}
+  Renders related entries for `page`. Primary source: page.related (a list of
+  permalinks). If fewer than 3 manual entries are listed, fall back to entries
+  that share the most tags with the current page.
+{%- endcomment -%}
+
+{% assign manual = "" | split: "" %}
+{% if page.related %}
+  {% for url in page.related %}
+    {% assign target = site.knowledge | where: "url", url | first %}
+    {% if target %}
+      {% assign manual = manual | push: target %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% assign auto = "" | split: "" %}
+{% if manual.size < 3 and page.tags %}
+  {% assign others = site.knowledge | where_exp: "doc", "doc.url != page.url" %}
+  {% assign scored = "" | split: "" %}
+  {% for doc in others %}
+    {% assign overlap = 0 %}
+    {% if doc.tags %}
+      {% for t in page.tags %}
+        {% if doc.tags contains t %}{% assign overlap = overlap | plus: 1 %}{% endif %}
+      {% endfor %}
+    {% endif %}
+    {% if overlap > 0 %}
+      {% assign scored = scored | push: doc %}
+    {% endif %}
+  {% endfor %}
+  {% assign auto = scored | sort: "updated" | reverse %}
+{% endif %}
+
+{% assign combined = manual %}
+{% for d in auto %}
+  {% assign already = false %}
+  {% for m in manual %}
+    {% if m.url == d.url %}{% assign already = true %}{% endif %}
+  {% endfor %}
+  {% unless already %}{% assign combined = combined | push: d %}{% endunless %}
+{% endfor %}
+
+{% if combined.size > 0 %}
+<aside class="related" aria-labelledby="related-heading">
+  <h2 id="related-heading">Related</h2>
+  <ul class="related-list">
+    {% for e in combined limit: 6 %}
+      <li>
+        <a href="{{ e.url | relative_url }}">
+          <span class="related-title">{{ e.title | escape }}</span>
+          {% if e.summary %}<span class="related-summary">{{ e.summary | escape | truncate: 120 }}</span>{% endif %}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</aside>
+{% endif %}

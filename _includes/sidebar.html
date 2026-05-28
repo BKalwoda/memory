@@ -1,0 +1,28 @@
+<aside class="sidebar" aria-label="Categories">
+  <h2 class="sidebar-heading">Categories</h2>
+  <ul class="cat-tree">
+    {% for top in site.data.categories %}
+      {% assign top_count = site.knowledge | where_exp: "d", "d.category contains top.slug" | size %}
+      <li>
+        <a href="{{ '/categories/' | append: top.slug | append: '/' | relative_url }}">
+          <span class="cat-icon" aria-hidden="true">{{ top.icon }}</span>
+          {{ top.label }}
+          <span class="cat-count">{{ top_count }}</span>
+        </a>
+        {% if top.children %}
+          <ul>
+            {% for child in top.children %}
+              {% assign child_count = site.knowledge | where: "category", child.slug | size %}
+              <li>
+                <a href="{{ '/categories/' | append: child.slug | append: '/' | relative_url }}">
+                  {{ child.label }}
+                  <span class="cat-count">{{ child_count }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</aside>

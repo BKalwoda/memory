@@ -1,0 +1,14 @@
+<footer class="site-footer" role="contentinfo">
+  <div class="container footer-inner">
+    <p class="footer-meta">
+      <span>{{ site.title | escape }}</span>
+      <span class="dot" aria-hidden="true">·</span>
+      <span>{{ site.knowledge.size }} entries</span>
+      <span class="dot" aria-hidden="true">·</span>
+      <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+      <span class="dot" aria-hidden="true">·</span>
+      <a href="{{ '/sitemap.xml' | relative_url }}">Sitemap</a>
+    </p>
+    <p class="footer-tagline">{{ site.tagline | escape }}</p>
+  </div>
+</footer>

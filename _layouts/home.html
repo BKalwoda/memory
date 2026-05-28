@@ -1,0 +1,94 @@
+---
+layout: default
+---
+{% assign all = site.knowledge | sort: "updated" | reverse %}
+{% if all.size == 0 %}{% assign all = site.knowledge | sort: "created" | reverse %}{% endif %}
+{% assign recent_count = site.recent_count | default: 6 %}
+
+<section class="hero">
+  <h1 class="hero-title">{{ site.title | escape }}</h1>
+  <p class="hero-tagline">{{ site.tagline | escape }}</p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="{{ '/search/' | relative_url }}">Search the vault</a>
+    <a class="btn btn-ghost" href="{{ '/archive/' | relative_url }}">Browse archive</a>
+  </div>
+</section>
+
+<section class="stats" aria-label="Stats">
+  <div class="stat">
+    <span class="stat-value">{{ site.knowledge.size }}</span>
+    <span class="stat-label">entries</span>
+  </div>
+  <div class="stat">
+    {% assign cat_total = 0 %}
+    {% for top in site.data.categories %}
+      {% assign cat_total = cat_total | plus: 1 %}
+      {% if top.children %}{% assign cat_total = cat_total | plus: top.children.size %}{% endif %}
+    {% endfor %}
+    <span class="stat-value">{{ cat_total }}</span>
+    <span class="stat-label">categories</span>
+  </div>
+  <div class="stat">
+    {% assign all_tags = "" | split: "" %}
+    {% for doc in site.knowledge %}
+      {% if doc.tags %}
+        {% for t in doc.tags %}{% assign all_tags = all_tags | push: t %}{% endfor %}
+      {% endif %}
+    {% endfor %}
+    {% assign unique_tags = all_tags | uniq %}
+    <span class="stat-value">{{ unique_tags.size }}</span>
+    <span class="stat-label">tags</span>
+  </div>
+</section>
+
+<section class="section">
+  <header class="section-head">
+    <h2>Recently added</h2>
+    <a class="section-more" href="{{ '/archive/' | relative_url }}">All entries →</a>
+  </header>
+  <div class="card-grid">
+    {% for entry in all limit: recent_count %}
+      {% include entry-card.html entry=entry %}
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <header class="section-head"><h2>Categories</h2></header>
+  <div class="tile-grid">
+    {% for top in site.data.categories %}
+      {% assign top_count = site.knowledge | where_exp: "d", "d.category contains top.slug" | size %}
+      <a class="tile" href="{{ '/categories/' | append: top.slug | append: '/' | relative_url }}">
+        <span class="tile-icon" aria-hidden="true">{{ top.icon }}</span>
+        <span class="tile-label">{{ top.label }}</span>
+        <span class="tile-meta">{{ top_count }} {% if top_count == 1 %}entry{% else %}entries{% endif %}</span>
+        {% if top.description %}<span class="tile-desc">{{ top.description }}</span>{% endif %}
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <header class="section-head">
+    <h2>Tag cloud</h2>
+    <a class="section-more" href="{{ '/tags/' | relative_url }}">All tags →</a>
+  </header>
+  {% assign tag_counts = "" | split: "" %}
+  {% for t in unique_tags %}
+    {% assign count = 0 %}
+    {% for x in all_tags %}{% if x == t %}{% assign count = count | plus: 1 %}{% endif %}{% endfor %}
+    {% capture pair %}{{ count }}|{{ t }}{% endcapture %}
+    {% assign tag_counts = tag_counts | push: pair %}
+  {% endfor %}
+  {% assign sorted = tag_counts | sort | reverse %}
+  <ul class="tag-cloud">
+    {% for pair in sorted limit: 20 %}
+      {% assign parts = pair | split: "|" %}
+      {% assign cnt = parts[0] | times: 1 %}
+      {% assign tname = parts[1] %}
+      {% assign weight = cnt | times: 4 | plus: 12 %}
+      {% if weight > 28 %}{% assign weight = 28 %}{% endif %}
+      <li><a href="{{ '/tags/' | append: tname | append: '/' | relative_url }}" style="font-size: {{ weight }}px">#{{ tname }} <span class="tc-count">{{ cnt }}</span></a></li>
+    {% endfor %}
+  </ul>
+</section>

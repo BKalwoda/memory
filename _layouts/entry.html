@@ -1,0 +1,96 @@
+---
+layout: default
+---
+{% assign cat_slug = page.category %}
+{% assign cat_label = cat_slug %}
+{% assign parent_label = nil %}
+{% for top in site.data.categories %}
+  {% if top.slug == cat_slug %}{% assign cat_label = top.label %}{% endif %}
+  {% if top.children %}
+    {% for child in top.children %}
+      {% if child.slug == cat_slug %}
+        {% assign cat_label = child.label %}
+        {% assign parent_label = top.label %}
+        {% assign parent_slug = top.slug %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+
+<article class="entry" itemscope itemtype="https://schema.org/Article">
+  <header class="entry-header">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="{{ '/categories/' | relative_url }}">Categories</a>
+      {% if parent_label %}
+        <span class="sep" aria-hidden="true">/</span>
+        <a href="{{ '/categories/' | append: parent_slug | append: '/' | relative_url }}">{{ parent_label }}</a>
+      {% endif %}
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="{{ '/categories/' | append: cat_slug | append: '/' | relative_url }}">{{ cat_label }}</a>
+    </nav>
+
+    <h1 class="entry-title" itemprop="headline">{{ page.title | escape }}</h1>
+
+    {% if page.summary %}
+      <p class="entry-summary" itemprop="description">{{ page.summary | escape }}</p>
+    {% endif %}
+
+    <div class="entry-meta">
+      <span class="meta-item">
+        <span class="meta-label">Created</span>
+        <time datetime="{{ page.created | date: '%Y-%m-%d' }}" itemprop="datePublished">{{ page.created | date: "%b %-d, %Y" }}</time>
+      </span>
+      {% if page.updated and page.updated != page.created %}
+      <span class="meta-item">
+        <span class="meta-label">Updated</span>
+        <time datetime="{{ page.updated | date: '%Y-%m-%d' }}" itemprop="dateModified">{{ page.updated | date: "%b %-d, %Y" }}</time>
+      </span>
+      {% endif %}
+      {% if page.type %}
+      <span class="meta-item">
+        <span class="meta-label">Type</span>
+        <span class="badge badge-{{ page.type }}">{{ page.type }}</span>
+      </span>
+      {% endif %}
+      {% if page.status and page.status != "evergreen" %}
+      <span class="meta-item">
+        <span class="meta-label">Status</span>
+        <span class="badge badge-{{ page.status }}">{{ page.status }}</span>
+      </span>
+      {% endif %}
+      {% if page.source_chat %}
+      <span class="meta-item">
+        <span class="meta-label">Source</span>
+        <span>{{ page.source_chat | escape }}</span>
+      </span>
+      {% endif %}
+    </div>
+
+    {% if page.tags and page.tags.size > 0 %}
+    <ul class="entry-tags" aria-label="Tags">
+      {% for tag in page.tags %}
+        <li><a href="{{ '/tags/' | append: tag | append: '/' | relative_url }}">#{{ tag }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </header>
+
+  <div class="entry-body" itemprop="articleBody">
+    {{ content }}
+  </div>
+
+  {% if page.action_items and page.action_items.size > 0 %}
+  <section class="action-items" aria-labelledby="actions-heading">
+    <h2 id="actions-heading">Action items</h2>
+    <ul>
+      {% for item in page.action_items %}
+        <li>{{ item | escape }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% include related.html %}
+</article>
