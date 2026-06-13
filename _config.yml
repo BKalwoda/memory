@@ -4,8 +4,8 @@ description: >-
   A long-term memory and archive system for important conversations and
   extracted knowledge. Built with Jekyll, hosted on GitHub Pages.
 author: bkalwoda
-url: ""
-baseurl: ""
+url: "https://bkalwoda.github.io"
+baseurl: "/memory"
 lang: en
 
 # Build settings
